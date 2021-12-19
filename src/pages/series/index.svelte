@@ -23,9 +23,15 @@
 </script>
 
 {#if $params.query}
-    <span>Wyniki wyszukiwania dla: {$params.query}</span>
+<div class="m-4 mb-2 text-size-1.5rem">
+    <span>Wyniki wyszukiwania dla: </span>
+    <span class="font-500">{$params.query}</span>
+</div>
+    
 {/if}
 
-{#each series as anime}
-    <AnimeSearch {anime} />
-{/each}
+<div class="flex flex-col py-2">
+    {#each series as anime}
+        <AnimeSearch {anime} />
+    {/each}
+</div>

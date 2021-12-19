@@ -1,5 +1,6 @@
 <script lang="ts">
     import { params } from "@roxi/routify";
+    import Anime from "../../components/Anime.svelte";
     import EpisodeComponent from "../../components/EpisodeComponent.svelte";
     import { API_URL } from "../../Constants";
     import type AnimeInfo from "../../objects/AnimeInfo";
@@ -27,15 +28,7 @@
 </script>
 
 {#if info}
-    <div class="flex">
-        <div class="w-80 flex-shrink-0">
-            <img class="w-80" src={info.image_url} alt="Anime" />
-        </div>
-        <div>
-            <span>{info.name}</span><br />
-            <span>{info.description}</span>
-        </div>
-    </div>
+    <Anime {info} />
     <div class="text-center">
         <p>List odcinków</p>
         {#each episodes as episode}

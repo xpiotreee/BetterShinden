@@ -4,8 +4,8 @@
     import Search from "./Search.svelte";
 </script>
 
-<nav class="bg-gray-700 text-true-gray-100 p-2 flex">
-    <div class="container mx-auto">
+<nav class="bg-true-gray-700 text-true-gray-100 p-2 flex">
+    <div class="container ml-2 mr-auto">
         <a href={$url("/")} class="font-600 mr-2">LepszyShinden</a>
         <a href={$url("/series")}>Anime</a>
     </div>

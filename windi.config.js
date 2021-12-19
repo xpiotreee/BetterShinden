@@ -6,7 +6,4 @@ export default {
             colors: colors
         },
     },
-    plugins: [
-        require('@windicss/plugin-icons'),
-    ]
 }
