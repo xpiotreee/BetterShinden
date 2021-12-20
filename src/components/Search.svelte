@@ -1,12 +1,5 @@
 <script lang="ts">
-    import {
-        afterPageLoad,
-        goto,
-        isActive,
-        params,
-        redirect,
-        url,
-    } from "@roxi/routify";
+    import { goto, params, url } from "@roxi/routify";
     import Search from "@svicons/boxicons-regular/search.svelte";
 
     let search: string = $params.query;
@@ -24,6 +17,6 @@
         class="bg-true-gray-600 p-0.5 pl-1.5 rounded-sm focus:outline-none"
     />
     <button class="w-6 align-middle focus:outline-none">
-        <Search />
+        <Search class='fill-true-gray-100'/>
     </button>
 </form>

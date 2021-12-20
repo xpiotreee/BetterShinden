@@ -28,11 +28,5 @@
 </script>
 
 {#if info}
-    <Anime {info} />
-    <div class="text-center">
-        <p>List odcinków</p>
-        {#each episodes as episode}
-            <EpisodeComponent {episode} /> <br />
-        {/each}
-    </div>
+    <Anime {info} {episodes}/>
 {/if}
