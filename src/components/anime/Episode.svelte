@@ -1,10 +1,11 @@
 <script lang="ts">
     import { goto, url } from "@roxi/routify";
-    import type Episode from "../objects/Episode";
+    import type * as Api from '../../Interfaces';
 
-    export let episode: Episode;
+    export let episode: Api.Episode;
+    export let anime: number;
     function handleClick() {
-        $goto($url(`/episode/${episode.id}`))
+        $goto($url(`/series/${anime}/episodes/${episode.id}`))
     }
 </script>
 
