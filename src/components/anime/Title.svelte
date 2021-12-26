@@ -9,7 +9,7 @@
     const otherTitles = anime.other_titles.join(", ");
 </script>
 
-<div class={clazz}>
+<div class="w-full {clazz}">
     <h1 class="text-size-1.75rem">{name}</h1>
     {#if otherTitles.length}
         <span class="text-size-0.75rem"> {otherTitles} </span>

@@ -1,83 +1,51 @@
 <script lang="ts">
-    import {
-        Title,
-        Rating,
-        Episode,
-        Stats,
-        Info,
-    } from "../../../components/anime";
+    import { Episode } from "../../../components/anime";
     import { params } from "@roxi/routify";
-    import { API_URL } from "../../../Constants";
-    import type * as Api from "../../../Interfaces";
     import Tag from "../../../components/Tag.svelte";
+    import { animeStore, episodesStore, tagsStore } from "../../../stores";
 
-    let anime: Api.AnimeInfo;
-    $: getInfo($params.id);
-    function getInfo(id: string) {
-        fetch(`${API_URL}/series/${id}`)
-            .then((result) => result.json())
-            .then((result) => {
-                anime = result;
-            });
-    }
-
-    let episodes = [] as Api.Episode[];
-    $: getEpisodes($params.id);
-    function getEpisodes(id: string) {
-        fetch(`${API_URL}/series/${id}/episodes`)
-            .then((result) => result.json())
-            .then((result) => {
-                episodes = result;
-            });
-    }
+    let anime = $animeStore;
+    let episodes = $episodesStore;
+    let tags = $tagsStore;
+    $: episodes = $episodesStore;
+    const tagsGroups = [
+        ["genre", "Gatunki"],
+        ["target_group", "Grupy docelowe"],
+        ["tag", "Pozostałe tagi"],
+        ["entity", "Rodzaje postaci"],
+        ["place", "Miejsce i czas"],
+        ["source", "Pierwowzór"],
+    ];
 </script>
 
-{#if anime}
-    <Title class='mx-2' {anime} />
-    <div class="flex gap-2">
-        <div class="w-1/4">
-            <img class="m-2 w-full rounded-lg" src={anime.image_url} alt="icon" />
-            <div class="container">
-                <Rating {anime} />
-            </div>
-            <div class="container font-500 text-left">
-                <Stats {anime} />
-            </div>
-            <div class="container font-500 text-left">
-                <Info {anime} />
-            </div>
+<div class="container">
+    <span>{anime.description || "Brak opisu."}</span>
+</div>
+
+<div class="container">
+    {#if !anime.tags.length}
+        <span> Brak tagów </span>
+    {/if}
+    {#each tagsGroups as [type, label]}
+        <div class="flex flex-wrap items-center">
+            <span class="font-500 w-full p-0.75"> {label}: </span>
+            {#each anime.tags.filter((tag) => tags[tag].type == type) as tag}
+                <Tag tag={tags[tag]} />
+            {/each}
+            <br />
         </div>
+    {/each}
+</div>
 
-        <div class="w-full">
-            <div class="container">
-                <span>{anime.description || "Brak opisu."}</span>
-            </div>
-
-            <div class="container">
-                {#if !anime.tags_groups.length}
-                    <span> Brak tagów </span>
-                {/if}
-                {#each anime.tags_groups as { name, tags }}
-                    <div class="flex flex-wrap items-center">
-                        <span class="font-500 w-full p-0.75"> {name}: </span>
-                        {#each tags as tag}
-                            <Tag name={tag} />
-                        {/each}
-                        <br />
-                    </div>
-                {/each}
-            </div>
-
-            <div class="pt-1 max-h-80 container">
-                <div class="max-h-75 overflow-y-scroll">
-                    {#each episodes as episode}
-                        <Episode anime={$params.id} {episode} /> <br />
-                    {/each}
-                </div>
-            </div>
-        </div>
+<div class="m-2 p-1 w-full max-h-80 rounded-lg bg-true-gray-700">
+    <div
+        class="flex my-2 pl-2 pr-1 w-full max-h-75 flex-col gap-2 overflow-y-scroll rounded-lg bg-true-gray-700"
+    >
+        {#each episodes as episode}
+            <Episode anime={$params.id} {episode} />
+        {/each}
     </div>
-{/if}
+</div>
 
 <style>
     ::-webkit-scrollbar-track {

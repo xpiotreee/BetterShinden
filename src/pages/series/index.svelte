@@ -3,28 +3,11 @@
     import { goto, params, ready, url } from "@roxi/routify";
     import { API_URL } from "../../Constants";
     import Tag from "../../components/Tag.svelte";
+    import type * as Api from "../../Interfaces";
+    import { tagsStore } from "../../stores";
 
-    interface SearchRating {
-        total: number;
-        plot: number;
-        graphics: number;
-        music: number;
-        characters: number;
-        top: number;
-    }
-
-    interface SearchResult {
-        id: number;
-        name: string;
-        type: string;
-        episodes_count: number;
-        status: string;
-        tags: string[];
-        thumbnail_url: string;
-        rating: SearchRating;
-    }
-
-    let series = [] as SearchResult[];
+    let tags = $tagsStore;
+    let series = [] as Api.SearchResult[];
     $: animes($params.query);
     function animes(query?: string) {
         let url = `${API_URL}/series`;
@@ -41,7 +24,7 @@
             });
     }
 
-    function handleClick(anime: SearchResult) {
+    function handleClick(anime: Api.SearchResult) {
         $goto($url(`/series/${anime.id}`));
     }
 </script>
@@ -82,9 +65,11 @@
                         <span class="font-400"> odcinków</span>
                     </div>
                 </div>
-                <div class="flex flex-wrap text-0.8rem p-1 text-left align-text-bottom">
+                <div
+                    class="flex flex-wrap text-0.8rem p-1 text-left align-text-bottom"
+                >
                     {#each anime.tags as tag}
-                        <Tag name={tag} />
+                        <Tag tag={tags[tag]} />
                     {/each}
                 </div>
             </div>
