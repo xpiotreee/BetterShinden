@@ -18,5 +18,8 @@
     "vite": "^2.2.3",
     "vite-plugin-windicss": "^0.15.10",
     "windicss": "^2.5.14"
+  },
+  "dependencies": {
+    "sveltejs-tippy": "^3.0.0"
   }
 }
