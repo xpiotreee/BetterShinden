@@ -24,6 +24,12 @@ export interface SearchResult {
     rating: SearchRating;
 }
 
+export interface SearchResponse {
+    page: number;
+    max_page: number;
+    results: SearchResult[];
+}
+
 export interface AnimeRating {
     total: number;
     count: number;

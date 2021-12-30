@@ -5,7 +5,7 @@
     let search: string = $params.query;
     function handleSubmit() {
         if (search) {
-            $goto($url(`/series`), { query: search });
+            $goto($url(`/series`), { search: search });
         }
     }
 </script>

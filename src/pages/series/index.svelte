@@ -5,22 +5,25 @@
     import Tag from "../../components/Tag.svelte";
     import type * as Api from "../../Interfaces";
     import { tagsStore } from "../../stores";
+    import PageSwitcher from "../../components/PageSwitcher.svelte";
 
     let tags = $tagsStore;
-    let series = [] as Api.SearchResult[];
-    $: animes($params.query);
-    function animes(query?: string) {
-        let url = `${API_URL}/series`;
-        if (query) {
-            url += `?q=${query}`;
+    let searchData: Api.SearchResponse;
+    $: animes($params.search, $params.page);
+    function animes(search: string, page: number) {
+        const params = {} as { [key: string]: any };
+        if (search) {
+            params["search"] = search;
         }
 
-        series = [];
-        fetch(url)
+        if (page) {
+            params["page"] = page;
+        }
+
+        fetch(`${API_URL}/series?` + new URLSearchParams(params))
             .then((response) => response.json())
             .then((json) => {
-                series = json;
-                $ready();
+                searchData = json;
             });
     }
 
@@ -29,15 +32,19 @@
     }
 </script>
 
-{#if $params.query}
+{#if $params.search}
     <div class="text-size-1.5rem">
         <span>Wyniki wyszukiwania dla: </span>
-        <span class="font-500">{$params.query}</span>
+        <span class="font-500">{$params.search}</span>
     </div>
 {/if}
 
+{#if searchData}
+    <PageSwitcher {...searchData} />
+{/if}
+
 <div class="flex flex-col">
-    {#each series as anime}
+    {#each searchData ? searchData.results : [] as anime}
         <button
             on:click={() => handleClick(anime)}
             class="flex my-2 bg-true-gray-700 rounded-md focus:outline-none flex-grow-1"
@@ -52,17 +59,17 @@
 
             <div class="flex flex-col justify-between h-32 w-full">
                 <div class="p-2 pt-1 font-500 text-left">
-                    <span>{anime.name}</span>
+                    <span> {anime.name} </span>
                     <div class="float-right text-center pt-1">
-                        <span class="align-top">{anime.rating.top}</span>
+                        <span class="align-top"> {anime.rating.top} </span>
                         <Star class="w-6 fill-amber-400" />
                     </div>
                     <div class="text-0.8rem py-1">
-                        <span>{anime.type} {anime.status}</span>
+                        <span> {anime.type} {anime.status} </span>
                     </div>
                     <div class="text-0.8rem py-1">
-                        <span>{anime.episodes_count}</span>
-                        <span class="font-400"> odcinków</span>
+                        <span> {anime.episodes_count} </span>
+                        <span class="font-400"> odcinków </span>
                     </div>
                 </div>
                 <div
@@ -76,3 +83,7 @@
         </button>
     {/each}
 </div>
+
+{#if searchData}
+    <PageSwitcher {...searchData} />
+{/if}
