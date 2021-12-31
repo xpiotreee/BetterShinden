@@ -1,4 +1,5 @@
 export interface Tag {
+    id: string;
     type: string;
     name: string;
     description: string;
@@ -22,6 +23,10 @@ export interface SearchResult {
     tags: string[];
     thumbnail_url: string;
     rating: SearchRating;
+}
+
+export interface SearchSettings {
+    tags: {[key: string]: number}
 }
 
 export interface SearchResponse {

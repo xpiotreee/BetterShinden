@@ -4,20 +4,37 @@
     import { API_URL } from "../../Constants";
     import Tag from "../../components/Tag.svelte";
     import type * as Api from "../../Interfaces";
-    import { tagsStore } from "../../stores";
+    import { tagsSettingsStore, tagsStore } from "../../stores";
     import PageSwitcher from "../../components/PageSwitcher.svelte";
+    import AdvancedSearch from '../../components/AdvancedSearch.svelte';
 
     let tags = $tagsStore;
     let searchData: Api.SearchResponse;
-    $: animes($params.search, $params.page);
-    function animes(search: string, page: number) {
+    $: animes($params.search, $params.page, $params.genres, $params.sort_by, $params.sort_order);
+    function animes(search: string, page: number, genres: string, sortBy: string, sortOrder: string) {
         const params = {} as { [key: string]: any };
-        if (search) {
+        if (search && search.length) {
             params["search"] = search;
         }
 
         if (page) {
             params["page"] = page;
+        }
+
+        if (genres && genres.length) {
+            params["genres"] = genres;
+            genres.split(';').forEach(element => {
+                const value = element[0] === 'i' ? 1 : 2
+                $tagsSettingsStore[element.substring(1)] = value;
+            });
+        }
+
+        if (sortBy) {
+            params["sort_by"] = sortBy;
+        }
+
+        if (sortOrder) {
+            params["sort_order"] = sortOrder;
         }
 
         fetch(`${API_URL}/series?` + new URLSearchParams(params))
@@ -32,14 +49,10 @@
     }
 </script>
 
-{#if $params.search}
-    <div class="text-size-1.5rem">
-        <span>Wyniki wyszukiwania dla: </span>
-        <span class="font-500">{$params.search}</span>
-    </div>
-{/if}
 
-{#if searchData}
+<AdvancedSearch />
+
+{#if searchData && searchData.max_page > 1}
     <PageSwitcher {...searchData} />
 {/if}
 
@@ -84,6 +97,6 @@
     {/each}
 </div>
 
-{#if searchData}
+{#if searchData && searchData.max_page > 1}
     <PageSwitcher {...searchData} />
 {/if}

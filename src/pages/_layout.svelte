@@ -7,6 +7,9 @@
     fetch(`${API_URL}/tags.json`)
         .then((res) => res.json())
         .then((res) => {
+            Object.keys(res).forEach(key => {
+                res[key] = {...res[key], id: key};
+            });
             $tagsStore = res;
         })
         .then($ready);
