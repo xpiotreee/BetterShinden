@@ -3,38 +3,29 @@
     import First from "@svicons/boxicons-regular/chevrons-left.svelte";
     import Right from "@svicons/boxicons-regular/chevron-right.svelte";
     import Last from "@svicons/boxicons-regular/chevrons-right.svelte";
-    import { goto, params, url } from "@roxi/routify";
+    import { params, url } from "@roxi/routify";
 
     export let page: number;
     export let max_page: number;
 
-    function switchPage(page: number) {
-        if (page > max_page || page < 1) {
-            return;
-        }
-
-        const parameters = { ...$params };
-        parameters.page = page;
-        $goto($url("./"), parameters);
-    }
 </script>
 
 <div class="flex w-full text-center center justify-center gap-1">
-    <button on:click={() => switchPage(page - 1)}>
+    <a href={$url(`./`, {...$params, page: Math.max(page - 1, 1)})}>
         <Left class="w-8 align-bottom bg-true-gray-700 rounded-full"/>
-    </button>
-    <button on:click={() => switchPage(1)}>
+    </a>
+    <a href={$url(`./`, {...$params, page: 1})}>
         <First class="w-8 align-bottom bg-true-gray-700 rounded-full"/>
-    </button>
+    </a>
     <div class="text-center">
         <span class="text-size-1.25rem align-middle"> {page} </span>
     </div>
-    <button on:click={() => switchPage(max_page)}>
+    <a href={$url(`./`, {...$params, page: max_page})}>
         <Last class="w-8 align-bottom bg-true-gray-700 rounded-full"/>
-    </button>
-    <button on:click={() => switchPage(page + 1)}>
+    </a>
+    <a href={$url(`./`, {...$params, page: Math.min(page + 1, max_page)})}>
         <Right class="w-8 align-bottom bg-true-gray-700 rounded-full"/>
-    </button>
+    </a>
 </div>
 
 <style>

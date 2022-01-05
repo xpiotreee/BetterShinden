@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { params, ready } from "@roxi/routify";
+    import { params } from "@roxi/routify";
     import { API_URL } from "../../../Constants";
     import type * as Api from "../../../Interfaces";
     import { Title, Rating, Stats, Info } from "../../../components/anime";
@@ -36,8 +36,8 @@
 
 {#if anime}
     <Title class="p-2 pb-0" {anime} />
-    <div class="flex gap-2">
-        <div class="w-1/4">
+    <div class="grid grid-cols-4 gap-2">
+        <div>
             <img
                 class="m-2 w-full rounded-lg"
                 src={anime.image_url}
@@ -54,7 +54,7 @@
             </div>
         </div>
 
-        <div class="w-full">
+        <div class="col-span-3">
             <slot {anime} />
         </div>
     </div>

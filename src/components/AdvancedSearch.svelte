@@ -6,8 +6,8 @@
     import { goto, params, url } from "@roxi/routify";
 
     let current = "genre";
-    let sorting = '';
-    let descending = true;
+    let sorting = $params.sort_by ? $params.sort_by : '';
+    $: descending = $params.sort_order != 'asc';
     let search = $params.search;
     $: tags = Object.values($tagsStore).filter((tag) => tag.type == current);
 

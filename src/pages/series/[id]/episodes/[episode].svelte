@@ -9,7 +9,7 @@
     import { API_URL } from "../../../../Constants";
     import { episodesStore } from "../../../../stores";
 
-    let episode = $episodesStore.find(
+    $: episode = $episodesStore.find(
         (episode) => episode.id == parseInt($params.episode)
     ) as Api.Episode;
 
@@ -29,11 +29,14 @@
         fetch(`${API_URL}/player/${id}`)
             .then((result) => result.text())
             .then((result) => {
-                playerIframe = result;
+                playerIframe = result.replace(
+                    'width="800" height="450"',
+                    'style="border:none;width:100%;height:100%;aspect-ratio:16/9;"'
+                );
             });
     }
 
-    function handleClick(direction: number) {       
+    function handleClick(direction: number) {
         const index = episode.index - 1 + direction;
         if (!$episodesStore[index]) {
             return;
@@ -44,34 +47,34 @@
         episode = $episodesStore[index];
         $goto($url(`./${episode.id}`));
     }
-
-    function close() {
-        $goto($url("../"));
-    }
 </script>
 
 <div class="p-2 w-full">
     {#if episode}
         <div class="pb-2">
-            <button on:click={close}>
+            <a href={$url("../")}>
                 <X class="w-8 align-bottom bg-true-gray-700 rounded-full" />
-            </button>
+            </a>
             <span class="text-size-1.75rem font-500">
                 {episode.index}. {episode.title || "Brak tytułu"}
             </span>
             <div class="float-right">
                 <button on:click={() => handleClick(-1)}>
-                    <Left class="w-8 align-bottom bg-true-gray-700 rounded-full"/>
+                    <Left
+                        class="w-8 align-bottom bg-true-gray-700 rounded-full"
+                    />
                 </button>
                 <button on:click={() => handleClick(1)}>
-                    <Right class="w-8 align-bottom bg-true-gray-700 rounded-full"/>
+                    <Right
+                        class="w-8 align-bottom bg-true-gray-700 rounded-full"
+                    />
                 </button>
             </div>
         </div>
     {/if}
 
     {#if playerIframe}
-        <div>
+        <div class="player-container">
             {@html playerIframe}
         </div>
     {/if}
@@ -85,8 +88,8 @@
                     <span class="font-500">
                         {quality}
                         {player}
-                    </span><br>
-                    <span>{new Date(upload_date).toLocaleString('pl-PL')}</span>
+                    </span><br />
+                    <span>{new Date(upload_date).toLocaleString("pl-PL")}</span>
                 </div>
                 <div class="text-right w-full">
                     <Headphone class="w-6" />
@@ -112,5 +115,10 @@
 <style>
     button {
         @apply outline-none;
+    }
+    .player-container {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 16/9;
     }
 </style>
