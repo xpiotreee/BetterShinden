@@ -29,7 +29,7 @@
 </div>
 
 <style>
-    button {
+    a {
         @apply focus:outline-none;
     }
 </style>

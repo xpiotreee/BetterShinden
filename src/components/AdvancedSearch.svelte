@@ -92,6 +92,9 @@
                 {label}
             </button>
         {/each}
+        <button on:click={() => $tagsSettingsStore = {}} class="p-1 bg-true-gray-600 rounded-lg ml-auto">
+            Wyczyść
+        </button>
     </div>
     {#each tags as tag}
         <TagCheckbox {tag} />
